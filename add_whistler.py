@@ -5,6 +5,14 @@ from scipy.io.wavfile import read
 from scipy.fft import fft, fftfreq
 from scipy import signal
 
+def add_whistler(data, sample_rate, shift, direction):
+    
+    if direction == 'left':
+        shift = -shift
+    second = np.zeros(data.size)
+    second[69000 + int(sample_rate * shift):86500 + int(sample_rate * shift)] = data[69000:86500]
+    return second
+
 sample_rate, samples = wavfile.read('../data bucket/whistler/whistler1.wav')
 
 aug_data = add_whistler(samples, sample_rate, 0.1, 'left')
@@ -32,11 +40,3 @@ plt.imshow(np.log(spectrogram_or), origin="lower")
 plt.show()
     #directory --> directory of wav files
     #data_dir --> spectrogram directory
-
-def add_whistler(data, sample_rate, shift, direction):
-    
-    if direction == 'left':
-        shift = -shift;
-    second = np.zeros(data.size)
-    second[69000 + int(sample_rate * shift):86500 + int(sample_rate * shift)] = data[69000:86500]
-    return second
